@@ -26,6 +26,11 @@ public class ServerController {
         serverService.connectToServer(id,user,pass);
         return ResponseEntity.ok().build();
     }
+    @PostMapping("/disconnect")
+    public ResponseEntity<?> disconnectFromServer(@RequestParam Long id){
+        serverService.disconnectFromServer(id);
+        return ResponseEntity.ok().build();
+    }
 
     @PostMapping("/sendssh")
     public ResponseEntity<?> sendSSHcommandToServer(@RequestParam Long id, @RequestParam String command){

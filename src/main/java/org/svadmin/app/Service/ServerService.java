@@ -17,8 +17,7 @@ public class ServerService {
     @Autowired
     private ServerRepository serverRepository;
 
-    private final ConcurrentHashMap<Long, Session> activeSessions = new ConcurrentHashMap<>();
-
+    private static final ConcurrentHashMap<Long, Session> serverSessionsMap = new ConcurrentHashMap<>();
 
     public void saveAndConnectToServer(Server server, String user, String password) {
         try {
@@ -29,33 +28,45 @@ public class ServerService {
             session.connect();
             System.out.println("Connected to " + server.getIp());
             serverRepository.save(server);
-            activeSessions.put(server.getId(), session);
-            System.out.println(activeSessions.get(server.getId()).toString());
+            serverSessionsMap.put(server.getId(), session);
         } catch (Exception e) {
             e.printStackTrace();
 
         }
     }
 
-    public void connectToServer(Long id, String user, String password) throws JSchException {
+    public void connectToServer(Long id, String user, String password) {
         try {
             JSch jsch = new JSch();
-            Server server = serverRepository.findById(id).orElse(null);
+            Server server = serverRepository.findById(id).get();
             Session session = jsch.getSession(user, server.getIp(), server.getPort());
-            if(!activeSessions.containsKey(id)) {
-                activeSessions.put(id, session);
-            }
-        }
-        catch (Exception e) {
+            session.setPassword(password);
+            session.setConfig("StrictHostKeyChecking", "no");
+            session.connect();
+            serverSessionsMap.put(id, session);
+            System.out.println("Connected to " + server.getIp());
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+    public void disconnectFromServer(Long id) {
+        try{
+            Session session = serverSessionsMap.get(id);
+            session.disconnect();
+            serverSessionsMap.remove(id);
+            System.out.println("Disconnected from server");
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     public void sendSSHcommandToServer(Long id, String command) {
         try {
             Server server = serverRepository.findById(id).get();
-            Session session = activeSessions.get(server.getId());
+            Session session = serverSessionsMap.get(server.getId());
 
             ChannelExec channel = (ChannelExec) session.openChannel("exec");
             channel.setCommand(command);
@@ -70,8 +81,8 @@ public class ServerService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
 }
+
+
