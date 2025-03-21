@@ -1,5 +1,6 @@
 package org.svadmin.app.Controller;
 
+import com.jcraft.jsch.JSchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,5 +19,19 @@ public class ServerController {
     public ResponseEntity<?> createConnection(@RequestBody Server server, @RequestParam String user, @RequestParam String pass) {
         serverService.saveAndConnectToServer(server,user,pass);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/connect")
+    public ResponseEntity<?> connectToServer(@RequestParam Long id, @RequestParam String user, @RequestParam String pass) throws JSchException {
+        serverService.connectToServer(id,user,pass);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/sendssh")
+    public ResponseEntity<?> sendSSHcommandToServer(@RequestParam Long id, @RequestParam String command){
+        serverService.sendSSHcommandToServer(id,command);
+        return ResponseEntity.ok().build();
+
+
     }
 }
