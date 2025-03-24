@@ -1,0 +1,13 @@
+.container {
+  max-width: 350px;
+  margin: auto;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn-primary{
+  background: #00ccff;
+  border-color: #00ccff;
+}

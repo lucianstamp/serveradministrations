@@ -1,0 +1,37 @@
+.container {
+  max-width: 50%;  /* Allow full width usage */
+  margin-left: 20px; /* Push everything to the left */
+  padding: 20px;
+}
+
+.table {
+  width: 60%; /* Reduce table width */
+  font-size: 14px; /* Make text smaller */
+}
+
+th, td {
+  padding: 6px; /* Reduce padding */
+  text-align: left; /* Align text to left */
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.table-responsive {
+  max-height: 300px; /* Reduce table height */
+  overflow-y: auto; /* Enable scrolling if needed */
+}
+.btn-danger{
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.form-group{
+  margin-bottom: 10px;
+  padding-left: 40px;
+  width: 10%;
+  font-size: 15px;
+}
+
+
+
+
+
+

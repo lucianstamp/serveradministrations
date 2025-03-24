@@ -1,7 +1,9 @@
 package org.svadmin.app.Entity;
 
 import jakarta.persistence.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @Entity(name = "user")
 @Table(name = "users",schema = "public")
 public class User {

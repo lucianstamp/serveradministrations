@@ -9,7 +9,12 @@ import org.svadmin.app.Repository.ServerRepository;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Service
 public class ServerService {
@@ -82,6 +87,33 @@ public class ServerService {
             e.printStackTrace();
         }
     }
+
+    public List<Server> getServers() {
+        return serverRepository.findAll();
+    }
+    public List<Session> getServerSessions() {
+        return new ArrayList<>(serverSessionsMap.values());
+    }
+    public List<Map<String, Object>> getServerSessionsTest() {
+        List<Map<String, Object>> responseList = new ArrayList<>();
+
+        // Iterate over the serverSessionsMap
+        for (Map.Entry<Long, Session> entry : serverSessionsMap.entrySet()) {
+            Map<String, Object> connection = new HashMap<>();
+            connection.put("id", entry.getKey()); // Use the map key (Long) as the ID
+            connection.put("host", entry.getValue().getHost()); // Assuming getHost() gives you the host info
+            // Add any other necessary session properties here
+
+            responseList.add(connection);
+        }
+
+        return responseList; // Return a list of connections with their IDs
+    }
+
+    public void deleteServer(Long id) {
+        serverRepository.deleteById(id);
+    }
+
 
 }
 
