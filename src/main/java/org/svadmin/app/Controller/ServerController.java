@@ -21,14 +21,14 @@ public class ServerController {
 
 
     @PostMapping
-    public ResponseEntity<?> createConnection(@RequestBody Server server, @RequestParam String user, @RequestParam String pass) {
-        serverService.saveAndConnectToServer(server, user, pass);
+    public ResponseEntity<?> createConnection(@RequestBody Server server) {
+        serverService.saveAndConnectToServer(server);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/connect")
-    public ResponseEntity<?> connectToServer(@RequestParam Long id, @RequestParam String user, @RequestParam String pass) throws JSchException {
-        serverService.connectToServer(id, user, pass);
+    public ResponseEntity<?> connectToServer(@RequestBody Server server) throws JSchException {
+        serverService.connectToServer(server);
         return ResponseEntity.ok().build();
     }
 

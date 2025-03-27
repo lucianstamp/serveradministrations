@@ -3,7 +3,7 @@ package org.svadmin.app.Entity;
 import jakarta.persistence.*;
 
 @Entity(name = "server")
-@Table(name = "servers" , schema = "public")
+@Table(name = "servers", schema = "public")
 public class Server {
 
     @Id
@@ -14,6 +14,26 @@ public class Server {
     private String ip;
     @Column(name = "PORT")
     private int port;
+    @Column(name = "USERNAME")
+    private String username;
+    @Column(name = "PASSWORD")
+    private String password;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUser(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public Long getId() {
         return id;

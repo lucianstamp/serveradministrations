@@ -24,11 +24,11 @@ public class ServerService {
 
     private static final ConcurrentHashMap<Long, Session> serverSessionsMap = new ConcurrentHashMap<>();
 
-    public void saveAndConnectToServer(Server server, String user, String password) {
+    public void saveAndConnectToServer(Server server) {
         try {
             JSch jsch = new JSch();
-            Session session = jsch.getSession(user, server.getIp(), server.getPort());
-            session.setPassword(password);
+            Session session = jsch.getSession(server.getUsername(), server.getIp(), server.getPort());
+            session.setPassword(server.getPassword());
             session.setConfig("StrictHostKeyChecking", "no");
             session.connect();
             System.out.println("Connected to " + server.getIp());
@@ -40,29 +40,28 @@ public class ServerService {
         }
     }
 
-    public void connectToServer(Long id, String user, String password) {
+    public void connectToServer(Server server) {
         try {
             JSch jsch = new JSch();
-            Server server = serverRepository.findById(id).get();
-            Session session = jsch.getSession(user, server.getIp(), server.getPort());
-            session.setPassword(password);
+            Session session = jsch.getSession(server.getUsername(), server.getIp(), server.getPort());
+            session.setPassword(server.getPassword());
             session.setConfig("StrictHostKeyChecking", "no");
             session.connect();
-            serverSessionsMap.put(id, session);
+            serverSessionsMap.put(server.getId(), session);
             System.out.println("Connected to " + server.getIp());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+
     public void disconnectFromServer(Long id) {
-        try{
+        try {
             Session session = serverSessionsMap.get(id);
             session.disconnect();
             serverSessionsMap.remove(id);
             System.out.println("Disconnected from server");
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -91,23 +90,24 @@ public class ServerService {
     public List<Server> getServers() {
         return serverRepository.findAll();
     }
+
     public List<Session> getServerSessions() {
         return new ArrayList<>(serverSessionsMap.values());
     }
+
     public List<Map<String, Object>> getServerSessionsTest() {
         List<Map<String, Object>> responseList = new ArrayList<>();
 
-        // Iterate over the serverSessionsMap
+
         for (Map.Entry<Long, Session> entry : serverSessionsMap.entrySet()) {
             Map<String, Object> connection = new HashMap<>();
-            connection.put("id", entry.getKey()); // Use the map key (Long) as the ID
-            connection.put("host", entry.getValue().getHost()); // Assuming getHost() gives you the host info
-            // Add any other necessary session properties here
-
+            connection.put("id", entry.getKey());
+            connection.put("host", entry.getValue().getHost());
+            connection.put("user", entry.getValue().getUserName());
             responseList.add(connection);
         }
 
-        return responseList; // Return a list of connections with their IDs
+        return responseList;
     }
 
     public void deleteServer(Long id) {
