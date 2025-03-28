@@ -1,0 +1,10 @@
+<br>
+<br>
+<div class="container-sm">
+  <form (ngSubmit)="sendCommand()" class="forms">
+    <div class=form-group>
+      <input type="text" name="command" [(ngModel)]="command" class="form-control" placeholder="command" required>
+    </div>
+    <button type="submit" class="btn-primary">Send SSH command</button>
+  </form>
+</div>

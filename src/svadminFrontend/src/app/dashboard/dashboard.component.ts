@@ -1,5 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, viewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -12,8 +14,9 @@ export class DashboardComponent implements OnInit {
   servers : any = [];
   connections: any = [];
   newServer = {ip:'',username:'',password:'',port:''};
+  error: string | undefined;
 
-  constructor(private http:HttpClient) {}
+  constructor(private http:HttpClient,private router:Router) { }
 
  ngOnInit() {
     this.http.get('http://localhost:8080/api/server/getAllServers',{headers: {'Content-Type': 'application/json'}}).subscribe(
@@ -31,15 +34,15 @@ export class DashboardComponent implements OnInit {
    )
  }
   onSubmitAddServer() {
-    console.log("Form Data before submission:", this.newServer); // Debugging
 
     this.http.post('http://localhost:8080/api/server', this.newServer,
       { headers: { 'Content-Type': 'application/json' } }).subscribe(
       response => {
         console.log("Server added:", response);
-        this.ngOnInit(); // Refresh list
+        this.ngOnInit();
       }, error => {
-        console.error("Error adding server:", error);  // Log errors
+        console.error("Error adding server:", error);
+        this.error = 'Invalid Server credentials'
       }
     );
   }
@@ -62,6 +65,11 @@ export class DashboardComponent implements OnInit {
       this.ngOnInit()
       }
     )
+ }
+
+ onClickSENDSSH(serverId: number) {
+    this.router.navigate(['/sendssh/'+serverId]);
+
  }
 
 }

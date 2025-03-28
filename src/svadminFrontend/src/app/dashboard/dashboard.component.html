@@ -24,6 +24,7 @@
     </div>
     <div class="container mt-4">
       <button type="submit" class="btn btn-success">Add New Server</button>
+      <p *ngIf="error" style="color: red;">{{ error }}</p>
     </div>
   </form>
 
@@ -47,7 +48,7 @@
           <td>
             <button type="button" class="btn btn-success btn-sm" (click)="onSubmitConnect(server.id)">Connect</button>
             <button type="button" class="btn btn-danger btn-sm" (click)="onSubmitDelete(server.id)">Delete</button>
-            <button type="button" class="btn btn-primary btn-sm">Submit</button>
+            <button type="button" class="btn btn-primary btn-sm" (click)="onClickSENDSSH(server.id)">Submit</button>
           </td>
         </tr>
         </tbody>
@@ -79,3 +80,4 @@
     </div>
   </div>
 </div>
+

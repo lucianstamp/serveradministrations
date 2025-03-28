@@ -24,7 +24,7 @@ public class ServerService {
 
     private static final ConcurrentHashMap<Long, Session> serverSessionsMap = new ConcurrentHashMap<>();
 
-    public void saveAndConnectToServer(Server server) {
+    public void saveAndConnectToServer(Server server)  {
         try {
             JSch jsch = new JSch();
             Session session = jsch.getSession(server.getUsername(), server.getIp(), server.getPort());
@@ -36,6 +36,7 @@ public class ServerService {
             serverSessionsMap.put(server.getId(), session);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalArgumentException("invalid server");
 
         }
     }

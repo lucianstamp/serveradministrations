@@ -5,10 +5,13 @@ import com.jcraft.jsch.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.svadmin.app.Entity.SSHCommandBody;
 import org.svadmin.app.Entity.Server;
 import org.svadmin.app.Repository.ServerRepository;
 import org.svadmin.app.Service.ServerService;
 
+import java.net.BindException;
+import java.net.ConnectException;
 import java.util.List;
 import java.util.Map;
 
@@ -19,11 +22,11 @@ public class ServerController {
     @Autowired
     ServerService serverService;
 
-
+    @ExceptionHandler(BindException.class)
     @PostMapping
-    public ResponseEntity<?> createConnection(@RequestBody Server server) {
+    public ResponseEntity<?> createConnection(@RequestBody Server server) throws JSchException {
         serverService.saveAndConnectToServer(server);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/connect")
@@ -39,8 +42,8 @@ public class ServerController {
     }
 
     @PostMapping("/sendssh")
-    public ResponseEntity<?> sendSSHcommandToServer(@RequestParam Long id, @RequestParam String command) {
-        serverService.sendSSHcommandToServer(id, command);
+    public ResponseEntity<?> sendSSHcommandToServer(@RequestBody SSHCommandBody body) {
+        serverService.sendSSHcommandToServer(body.getId(), body.getCommand());
         return ResponseEntity.ok().build();
     }
 

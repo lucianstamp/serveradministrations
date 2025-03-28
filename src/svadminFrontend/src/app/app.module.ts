@@ -7,12 +7,14 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { SendSSHComponent } from './send-ssh/send-ssh.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginFormComponent,
-    DashboardComponent
+    DashboardComponent,
+    SendSSHComponent
   ],
   imports: [
     BrowserModule,
